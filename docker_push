@@ -1,0 +1,14 @@
+#!/bin/bash
+tag=$1
+astag=$2
+
+echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
+if [[ $# == 2 ]]
+then
+    docker tag testingtony/balena-inky-phat:${tag} testingtony/balena-inky-phat:${astag}
+    tag=${astag}
+fi
+  
+
+docker push testingtony/balena-inky-phat:${tag}

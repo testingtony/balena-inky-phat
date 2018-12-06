@@ -1,0 +1,25 @@
+language: python
+python:
+  - '3.6'
+  - '2.7'
+env:
+  - PI=raspberry-pi
+  - PI=raspberrypi3
+      
+services:
+  - docker
+
+script:
+  - docker build --build-arg pi=${PI} --build-arg python=${TRAVIS_PYTHON_VERSION} -t testingtony/balena-inky-phat:${PI}-${TRAVIS_PYTHON_VERSION} .
+
+deploy:
+  - provider: script
+    script: bash docker_push ${PI}-${TRAVIS_PYTHON_VERSION}
+    on:
+      branch: master
+      
+  - provider: script
+    script: bash docker_push ${PI}-${TRAVIS_PYTHON_VERSION}  ${PI}
+    on:
+      branch: master
+      python: 3.6
