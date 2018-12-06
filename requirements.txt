@@ -1,0 +1,3 @@
+einky>=0.0.2
+numpy
+Pillow
