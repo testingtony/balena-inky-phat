@@ -10,16 +10,23 @@ services:
   - docker
 
 script:
-  - docker build --build-arg pi=${PI} --build-arg python=${TRAVIS_PYTHON_VERSION} -t testingtony/balena-inky-phat:${PI}-${TRAVIS_PYTHON_VERSION} .
+  - docker build --build-arg pi=${PI} --build-arg python=${TRAVIS_PYTHON_VERSION} -t testingtony/balena-inky-phat:temp .
 
 deploy:
   - provider: script
-    script: bash docker_push ${PI}-${TRAVIS_PYTHON_VERSION}
+    script: bash docker_push temp ${PI}-${TRAVIS_PYTHON_VERSION}-${TRAVIS_BRANCH}
     on:
-      branch: master
-      
+      all_branches: true
+      condition: $TRAVIS_BRANCH != master
+
   - provider: script
-    script: bash docker_push ${PI}-${TRAVIS_PYTHON_VERSION}  ${PI}
+    script: bash docker_push temp ${PI}-${TRAVIS_PYTHON_VERSION}
     on:
       branch: master
-      python: 3.6
+
+  - provider: script
+    script: bash docker_push temp ${PI}
+    on:
+      branch: master
+      condition: ${TRAVIS_PYTHON_VERSION:0:1} == 3
+      
